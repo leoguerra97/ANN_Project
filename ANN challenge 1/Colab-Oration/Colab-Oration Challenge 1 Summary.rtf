@@ -1,0 +1,33 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2513
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww19580\viewh10440\viewkind0
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 # Colab-Oration \
+Artificial Neural Networks and Deep Learning - Challenge 1 - Image Classification on Mask Dataset\
+\
+We approached the task by building our own convolutional neural network model following the outline provided during lectures. \
+We created datasets generator through the flow_from_dataframe function to combine the image with the JSON label and then created our datasets by splitting our training data in two sets for training and validation. \
+The model was setup with convolutional part 5 layers deep (each layer composed of conv. layer, activation layer and maxpooling layer), to which we fed an image of size (IMG_H, IMG_W) (at the beginning set to 407,407), followed by a classifier with one 512 unit dense layer and a softmax activation layer.\
+We then set the loss function the optimizer with its learning rate and the validation metric (accuracy). \
+After this our model was ready to be trained and we set a training lenght of 30 epochs. After training, we created the test set and made predictions on it using the model. Finally using the provided create_csv function we created the csv file.\
+After completing a base model we introduced data augmentation on our training data to reduce overfitting and increase our performace on the test set.\
+\
+Since our model did meet our expectations and scored about 50% accuracy on the test set, we decided to change strategy and use a transfer learining approach.\
+We imported the VGG16 keras model setup with fine-tuning starting from the 15th layer. We also decided to increase the number of layers in the fully connected classifier by adding a new dense layer with 128 units. \
+This substantially imporved our score as we set a 77% test score on our first attempt with VGG.\
+\
+To further improve and speedup the training process we decided to implement early stopping and dropout. By doing so, and also tuning all parameter values (such as learining rate, data augmentation parameters, number of units in a dense layer and early stopping patience) we managed to achieve a 91.11% test after some trial and error.\
+\
+We then decided to experiment with different models other than VGG16: we tried VGG19, MobileNet, ResNet50 and InceptionV3. Between these, the Inception model yielded the best result and managed to boost our score to 94.44%. Then we decided to try the Xception model. Using this model, after some parameter tuning, we managed to slighlty improve our score to 94.67%, our best result to date.\
+\
+Parallel to this we tried to improve our base model using the knowledge gained with the transfer learning approach. We implemented early stopping and dropout like the transfer learning approach and improved the convolutional phase by modifying the number of initial features and depth of the network to optimize feature learning. This changes greatly improved our accuracy bringing it from about 50% to 75%.\
+\
+\
+It is important to note that we set the seed to make experiments reproducible but, since using Colab's GPU introduces a randomic element, the experiments may not be repeatable with perfect accuracy.\
+\
+We are submitting 4 notebooks (and their respective result in csv format) which represent our most critical attempts at the challenge: the first notebook \'93BaseModel\'94 shows our base model in its most updated form, the other three show our attempts using transfer learning. In particular, the second notebook \'93VGG\'94 is our highest scoring VGG model, the third notebook \'93InceptionV3\'94 is our best result with InceptionV3 and the last \'93Xception\'94 is the Xception model which achieved our best result overall.\
+\
+}
