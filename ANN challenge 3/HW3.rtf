@@ -1,0 +1,21 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2577
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww12740\viewh11320\viewkind0
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 We decided to separate the convolutional part of the network from the rest of the network to reduce the training time on the various epochs. So we imported VGG19 with parameter include_top = False to remove the FC layers and processed all images to create a dictionary of feature maps indexed by image id. Each image id now has a flattened vector of  512 3x5 feature maps associated to it. \
+\
+Then we focused on the answers and created a dictionary to map answers to a number and created functions to encode/decode the answers with our dictionary.\
+As for the questions we decided to encode them using the Space library to encode them as vectors of length equal to maximum question length (24) where each word is encoded as a 300 dim vector.\
+\
+Then we created two functions, create_tuples and create_test_tuples, to create the tuples to feed to the network. These function take as input the training questions in the json files, extract the text question, answer (the answer part is only relative to the training part and is not present in the create_test_tuples function as it concerns the test set) and image id. Then the questions are encoded with spacy, the answers are encoded with our vocabulary and the features relative to the image id are fetched. Finally a tuple is returned for every entry in the json.  \
+\
+After this was done we had our training set ready to go, so we created a model by merging two models: the image model, which is an empty model that just takes as input the flattened features and outputs them, and LSTM model, composed of 3 LSTM layers, which takes as input the encoded questions. \
+Then these two models are concatenated and followed by a FC layer made of 256 units with ReLu activation functions with Dropout.\
+At the end there is a layer with 58 neurons (number of possible answers/classes) with softmax activation.\
+\
+We trained the model by batches for about 50 epochs and, once training was done, we created the predictions. \
+The final step was encoding the prediction using the vocabulary provided on Kaggle, so we decoded the predictions using our vocabulary and re-encoded them using the \'93correct\'94 vocabulary.\
+}
